@@ -1,3 +1,4 @@
+
 #
 # Copyright (C) 2013 The Android Open Source Project
 # Copyright (C) 2013 Óliver García Albertos (oliverarafo@gmail.com)
@@ -26,42 +27,48 @@
 
   - Make a workspace
 
-  $ mkdir -p ~/cyanogenmod/system
-  $ cd ~/cyanogenmod/system
+
+$ mkdir ~/cm10.1
+$ cd ~/cm10.1
+£ mkdir -p bin
 
 
   - Do repo init & sync
 
-  $ repo init -u git://github.com/CyanogenMod/android.git -b jellybean
+$ curl https://dl-ssl.google.com/dl/googlesource/git-repo/repo > ~/bin/repo
+$ chmod a+x ~/bin/repo
+$ repo init -u git://github.com/CyanogenMod/android.git -b cm-10.1
+
+$ repo sync
 
 
   - Create .repo/local_manifest.xml with the following content:
 
   <?xml version="1.0" encoding="UTF-8"?>
   <manifest>
-      <project name="OliverG96/android_device_samsung_golden" path="device/samsung/golden" />
-      <project name="OliverG96/android_kernel_samsung_golden" path="kernel/samsung/golden" />
-      <project name="OliverG96/android_vendor_samsung_golden" path="vendor/samsung/golden" />
+  <project name="enox/android_device_samsung_golden" path="device/samsung/golden" remote="github" revision="cm-10.1"/>
+  <project name="enox/android_kernel_samsung_golden" path="kernel/samsung/golden" remote="github" revision="cm-10.1"/>
+  <project name="enox/android_vendor_samsung_golden" path="vendor/samsung/golden" remote="github" revision="cm-10.1"/>
   </manifest>
 
-  $ repo sync
+
+$ repo sync
 
 
   - Setup vendor
 
-  $ ./vendor/cm/get-prebuilts
+$ ~/cm10.1/vendor/cm/get-prebuilts
 
 
-  - Setup environment
-
-  $ source build/envsetup.sh
-  $ lunch cm_golden-eng
+  - Setup environment & build
 
 
-  - Build CM10
 
-  $ export USE_CCACHE=1
-  $ make -j4 bacon
+$ . build/envsetup.sh
+$ export USE_CCACHE=1
+$ brunch cm_golden-userdebug
+
+
 
 
 * Thanks
